@@ -1,0 +1,18 @@
+.safetyScoreContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.driverSafetyListContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.metricsContainer{
+  display: flex;
+  padding: 20px 20px;
+}
