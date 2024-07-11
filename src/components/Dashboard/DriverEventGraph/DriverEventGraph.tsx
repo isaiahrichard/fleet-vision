@@ -37,19 +37,19 @@ export default function DriverEventGraph() {
       >
         Most Common Driver Events
       </Typography>
-      <BarChart
-        xAxis={[
-          {
-            scaleType: "band",
-            data: sortedData.map((element: TempData) => element.name),
-          },
-        ]}
-        series={[
-          { data: sortedData.map((element: TempData) => element.count) },
-        ]}
-        width={1000}
-        height={300}
-      />
+      <Box className={styles.chartContainer}>
+        <BarChart
+          xAxis={[
+            {
+              scaleType: "band",
+              data: sortedData.map((element: TempData) => element.name),
+            },
+          ]}
+          series={[
+            { data: sortedData.map((element: TempData) => element.count) },
+          ]}
+        />
+      </Box>
     </Box>
   );
 }

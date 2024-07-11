@@ -32,11 +32,11 @@ export default function Dashboard() {
           />
         </Box>
       </Box>
-      <Box className={styles.metricsContainer}>
+      <Box className={styles.metricsContainer} gap={10}>
         <Box flexGrow={1}>
           <VehicleHealthGraph />
         </Box>
-        <Box flexGrow={4}>
+        <Box flexGrow={2}>
           <DriverEventGraph />
         </Box>
       </Box>
