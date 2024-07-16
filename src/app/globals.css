@@ -8,7 +8,7 @@
 
 :root {
   --background-dark: #000000;
-  --background-light: #FAF9F6;
+  --background-light: #f4f4f5;
   --accent-primary: #01b5e1;
   --accent-primary-hover: #3d8cff;
   --accent-secondary: #fec72d;
@@ -24,4 +24,9 @@ body {
   overflow-x: hidden;
   max-height: 100vh;
   background-color: var(--background-light);
+}
+
+/* TEMP */
+#coupon-birds-embed-div{
+  display: none;
 }

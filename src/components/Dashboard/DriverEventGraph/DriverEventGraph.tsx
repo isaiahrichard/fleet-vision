@@ -27,6 +27,45 @@ const sortedData: TempData[] = data
   .slice(0, 7);
 
 export default function DriverEventGraph() {
+  const formatLabels = (label: string): string => {
+    if (!/\s/.test(label)) return label;
+    const labelWords = label.split(" ");
+    let masterString = "";
+    let currentString = "";
+    labelWords.forEach((word) => {
+      if (currentString.length + word.length < 11) {
+        currentString += word + " ";
+      } else {
+        masterString += currentString + "\n";
+        currentString = word;
+      }
+    });
+    masterString += currentString + "\n";
+    return masterString;
+  };
+
+  function insertNewlinesEvery10Chars(str: string) {
+    const maxLength = 10;
+    let result = "";
+    let currentLineLength = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      result += str[i];
+      currentLineLength++;
+
+      // If the current line exceeds maxLength and the next character is a space, add a newline
+      if (
+        currentLineLength >= maxLength &&
+        (str[i] === " " || str[i + 1] === " " || str[i + 1] === undefined)
+      ) {
+        result += "\n";
+        currentLineLength = 0;
+      }
+    }
+
+    return result;
+  }
+
   return (
     <Box className={styles.container}>
       <Typography
@@ -43,6 +82,7 @@ export default function DriverEventGraph() {
             {
               scaleType: "band",
               data: sortedData.map((element: TempData) => element.name),
+              valueFormatter: formatLabels,
             },
           ]}
           series={[

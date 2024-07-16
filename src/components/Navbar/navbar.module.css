@@ -9,6 +9,7 @@
   top: 0;
   z-index: 10;
   border-bottom: 1px solid gray;
+  max-height: 10vh;
 }
 
 .navBarTitle {
@@ -44,7 +45,6 @@
 .iconContainer {
   display: flex;
   flex-direction: row;
-  margin: 0 20px;
   justify-content: center;
   align-items: center;
 }

@@ -14,7 +14,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <NavBar />
-        <div style={{ margin: "1% 3%" }}>{children}</div>
+        <div style={{ margin: "1% 10%" }}>{children}</div>
       </body>
     </html>
   );

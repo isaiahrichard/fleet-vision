@@ -2,164 +2,184 @@
 
 "use client";
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
+import { Box, Typography, Divider } from "@mui/material";
+import Image from "next/image";
+import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import styles from "./page.module.css";
-import { useRouter } from "next/navigation";
-import { NavBar } from "@/components/Navbar/Navbar";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { driverData, Driver, driverColumns } from "./types";
+import { HealthAndSafety, DriveEta } from "@mui/icons-material";
 
-const columns = [
-  {
-    field: "title",
-    headerName: "Title",
-    resizable: false,
-  },
-  {
-    field: "gross",
-    headerName: "Gross",
-    resizable: false,
-  },
-  {
-    field: "company",
-    headerName: "Company",
-    resizable: false,
-  },
-  {
-    field: "director",
-    headerName: "Director",
-    resizable: false,
-  },
-  {
-    field: "year",
-    headerName: "Year",
-  },
-  {
-    field: "cinematicUniverse",
-    headerName: "Cinematic Universe",
-    resizable: false,
-  },
-];
+function QuickSearchToolbar() {
+  return (
+    <Box
+      sx={{
+        pl: 1,
+        pr: 1,
+        pb: 2,
+        pt: 1,
+        display: "flex",
+      }}
+    >
+      <GridToolbarQuickFilter
+        style={{ flex: 1 }}
+        quickFilterParser={(searchInput: string) =>
+          searchInput
+            .split(",")
+            .map((value) => value.trim())
+            .filter((value) => value !== "")
+        }
+        debounceMs={400}
+      />
+    </Box>
+  );
+}
 
-const rows = [
-  {
-    id: 0,
-    title: "Avatar",
-    gross: 2847246203,
-    company: "20th Century Fox",
-    director: "temp",
-    year: 2009,
-  },
-  {
-    id: 1,
-    title: "Avengers: Endgame",
-    gross: 2797501328,
-    company: "Disney Studios",
-    year: 2019,
-    director: "temp",
-    cinematicUniverse: "Marvel Cinematic Universe",
-  },
-  {
-    id: 2,
-    title: "Titanic",
-    gross: 2187425379,
-    company: "20th Century Fox",
-    director: "temp",
-    year: 1997,
-  },
-  {
-    id: 3,
-    title: "Star Wars: The Force Awakens",
-    gross: 2068223624,
-    company: "Disney Studios",
-    director: "temp",
-    year: 2015,
-    cinematicUniverse: "Star Wars",
-  },
-  {
-    id: 4,
-    title: "Avengers: Infinity War",
-    gross: 2048359754,
-    company: "Disney Studios",
-    director: "temp",
-    year: 2018,
-    cinematicUniverse: "Marvel Cinematic Universe",
-  },
-  {
-    id: 5,
-    title: "Spider-Man: No Way Home",
-    gross: 1892768346,
-    company: "Disney Studios",
-    director: "temp",
-    year: 2021,
-    cinematicUniverse: "Marvel Cinematic Universe",
-  },
-  {
-    id: 6,
-    title: "Jurassic World",
-    gross: 1671713208,
-    company: "Universal Pictures",
-    director: "temp",
-    year: 2015,
-    cinematicUniverse: "Jurassic Park",
-  },
-  {
-    id: 7,
-    title: "The Lion King",
-    gross: 1656943394,
-    company: "Disney Studios",
-    director: "temp",
-    year: 2019,
-  },
-  {
-    id: 8,
-    title: "The Avengers",
-    gross: 1518812988,
-    company: "Disney Studios",
-    director: "temp",
-    year: 2012,
-    cinematicUniverse: "Marvel Cinematic Universe",
-  },
-  {
-    id: 9,
-    title: "Furious 7",
-    gross: 1516045911,
-    company: "Universal Pictures",
-    director: "temp",
-    year: 2015,
-    cinematicUniverse: "Fast & Furious",
-  },
-  {
-    id: 10,
-    title: "Frozen II",
-    gross: 1450026933,
-    company: "Disney Studios",
-    director: "temp",
-    year: 2019,
-    cinematicUniverse: "Frozen",
-  },
-];
-
-export default function Drivers() {
-  const router = useRouter();
-
+function noDriverSelected() {
   return (
     <Box>
-      <DataGrid
-        disableColumnFilter
-        disableColumnSelector
-        disableDensitySelector
-        disableColumnMenu
-        hideFooter
-        autosizeOnMount
-        columns={columns}
-        rows={rows}
-        slots={{ toolbar: GridToolbar }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-          },
-        }}
+      <Typography fontSize={32} textAlign="center">
+        No Driver Selected
+      </Typography>
+      <Image
+        src="/images/drivericon.png"
+        alt="Description of the image"
+        width={400}
+        height={400}
+        style={{ opacity: 0.5 }}
       />
+      <Typography textAlign="center">
+        Select a driver to see a detailed view
+      </Typography>
+    </Box>
+  );
+}
+
+interface TempData {
+  name: string;
+  count: number;
+}
+
+const recentDriverBehaviourStats: TempData[] = [
+  { name: "Texting (Right)", count: 85 },
+  { name: "Phone call (Right)", count: 191 },
+  { name: "Texting (Left)", count: 66 },
+  { name: "Phone call (Left)", count: 77 },
+  { name: "Radio", count: 234 },
+  { name: "Drinking", count: 142 },
+  { name: "Reach Side", count: 94 },
+  { name: "Hair and Makeup", count: 187 },
+  { name: "Talking to passenger", count: 120 },
+  { name: "Reach Backseat", count: 178 },
+  { name: "Drowsy", count: 243 },
+];
+
+const sortedDriverBehaviour: TempData[] = recentDriverBehaviourStats
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 4);
+
+export default function Drivers() {
+  const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+
+  return (
+    <Box className={styles.container}>
+      <Box className={styles.leftBox}>
+        <DataGrid
+          disableColumnFilter
+          disableColumnSelector
+          disableDensitySelector
+          disableMultipleRowSelection
+          disableColumnMenu
+          hideFooter
+          autosizeOnMount
+          columns={driverColumns}
+          rows={driverData}
+          slots={{ toolbar: QuickSearchToolbar }}
+          onRowSelectionModelChange={(id) => {
+            const selectedRowData = driverData.filter(
+              (row) => id[0] == row.id
+            )[0];
+            setSelectedDriver(selectedRowData);
+          }}
+          slotProps={{
+            toolbar: {
+              showquickfilter: true,
+            },
+          }}
+          sx={{
+            "& .MuiDataGrid-columnHeader:focus, .MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+            "& .Mui-selected": {
+              backgroundColor: "var(--accent-primary) !important",
+              color: "white",
+            },
+          }}
+        />
+      </Box>
+      <Box className={styles.rightBox}>
+        {selectedDriver ? (
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            flexDirection={"column"}
+          >
+            <Typography fontSize={32} textAlign="center">
+              {selectedDriver?.name}
+            </Typography>
+            <Box className={styles.status}>
+              <Typography className={styles.statusTitle}>
+                {selectedDriver.status}
+              </Typography>
+              <Box
+                className={styles.statusIcon}
+                bgcolor={selectedDriver.status == "Online" ? "green" : "red"}
+              />
+            </Box>
+            <Image
+              src="/images/personIcon.png"
+              alt="profile pic"
+              width={300}
+              height={300}
+              style={{ opacity: 0.5 }}
+            />
+            <Divider flexItem />
+            <Box display="flex" className={styles.infoContainer}>
+              <Box className={styles.innerInfoContainer}>
+                <DriveEta />
+                <Typography noWrap>{selectedDriver.currentVehicle}</Typography>
+              </Box>
+              <Divider orientation="vertical" flexItem />
+              <Box className={styles.innerInfoContainer}>
+                <HealthAndSafety />
+                <Typography>{selectedDriver.safetyScore}</Typography>
+              </Box>
+            </Box>
+            <Divider flexItem />
+            <Box className={styles.behaviourContainer}>
+              <Box className={styles.behaviourTitleBox}>
+                <Typography textAlign="center" fontSize={24}>
+                  <Typography className={styles.largeTitle}>TOP</Typography>
+                  Driver Behaviours
+                </Typography>
+              </Box>
+              <Box className={styles.behaviourListContainer}>
+                {sortedDriverBehaviour.map((driverBehaviour, index) => (
+                  <Box key={index} className={styles.behaviourPill}>
+                    <Typography px={1} minWidth={200}>
+                      {driverBehaviour.name}
+                    </Typography>
+                    <Divider orientation="vertical" flexItem />
+                    <Typography px={1}>{driverBehaviour.count}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+        ) : (
+          noDriverSelected()
+        )}
+      </Box>
     </Box>
   );
 }
