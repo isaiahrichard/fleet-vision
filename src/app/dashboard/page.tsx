@@ -8,6 +8,7 @@ import SafetyScoreChart from "@/components/Dashboard/SafetyScoreChart/SafetyScor
 import VehicleHealthList from "@/components/Dashboard/VehicleHealthList/VehicleHealthList";
 import DriverEventGraph from "@/components/Dashboard/DriverEventGraph/DriverEventGraph";
 import MetricCard from "@/components/Dashboard/MetricCard/MetricCard";
+import { vehicleErrorData } from "@/components/Dashboard/VehicleHealthList/types";
 
 export default function Dashboard() {
   return (
@@ -38,7 +39,7 @@ export default function Dashboard() {
       <DriverEventGraph />
       <Box className={styles.topBox}>
         <SafetyScoreChart />
-        <VehicleHealthList />
+        <VehicleHealthList vehicleErrors={vehicleErrorData} />
       </Box>
     </Box>
   );

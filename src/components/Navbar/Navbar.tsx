@@ -1,14 +1,18 @@
+"use client";
+
+import React, { useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./navbar.module.css";
 import { useRouter, usePathname } from "next/navigation";
-import HelpIcon from "@mui/icons-material/Help";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PersonIcon from "@mui/icons-material/Person";
+import { Notifications, Settings, Person } from "@mui/icons-material";
+import { useNotificationContext } from "@/context/NotificationContext";
+import { NotificationMenu } from "./NotificationMenu";
 
 export const NavBar = () => {
   const router = useRouter();
   const pathName = usePathname();
+
+  const { count, modalOpen, setModalOpen } = useNotificationContext();
 
   return (
     <Box className={styles.pageContainer}>
@@ -42,12 +46,29 @@ export const NavBar = () => {
         </Box>
       </Box>
       <Box className={styles.iconContainer}>
-        <HelpIcon className={styles.icon} />
-        <NotificationsIcon className={styles.icon} />
-        <SettingsIcon className={styles.icon} />
-        <PersonIcon className={styles.icon} />
+        <Box position="relative" onClick={() => setModalOpen(!modalOpen)}>
+          <Notifications className={styles.icon} />
+          <Box className={styles.notifCount}>
+            <span>{count}</span>
+          </Box>
+        </Box>
+        <Settings className={styles.icon} />
+        <Person className={styles.icon} />
         <Box>Isaiah Richards</Box>
       </Box>
+      {modalOpen && (
+        <Box
+          position="absolute"
+          top={100}
+          right={100}
+          bgcolor={"red"}
+          height={200}
+          width={200}
+        >
+          <NotificationMenu />
+          <div>TEST TEST TEST TEST TEST</div>
+        </Box>
+      )}
     </Box>
   );
 };

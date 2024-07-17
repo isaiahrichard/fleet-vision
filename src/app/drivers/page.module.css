@@ -87,3 +87,8 @@
     color: var(--accent-primary);
   }
 }
+
+.searchBar {
+  padding: 8px;
+  display: flex;
+}

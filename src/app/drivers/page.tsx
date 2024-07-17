@@ -7,19 +7,11 @@ import Image from "next/image";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import styles from "./page.module.css";
 import { driverData, Driver, driverColumns } from "./types";
-import { HealthAndSafety, DriveEta } from "@mui/icons-material";
+import { HealthAndSafetyOutlined, DriveEtaOutlined } from "@mui/icons-material";
 
 function QuickSearchToolbar() {
   return (
-    <Box
-      sx={{
-        pl: 1,
-        pr: 1,
-        pb: 2,
-        pt: 1,
-        display: "flex",
-      }}
-    >
+    <Box sx={{}} className={styles.searchBar}>
       <GridToolbarQuickFilter
         style={{ flex: 1 }}
         quickFilterParser={(searchInput: string) =>
@@ -41,7 +33,7 @@ function noDriverSelected() {
         No Driver Selected
       </Typography>
       <Image
-        src="/images/drivericon.png"
+        src="/images/driverIcon.png"
         alt="Description of the image"
         width={400}
         height={400}
@@ -82,12 +74,21 @@ export default function Drivers() {
 
   return (
     <Box className={styles.container}>
-      <Box className={styles.leftBox}>
+      <Box
+        className={styles.leftBox}
+        sx={{
+          "& .header": {
+            backgroundColor: "var(--accent-primary-hover)",
+            color: "white",
+          },
+        }}
+      >
         <DataGrid
           disableColumnFilter
           disableColumnSelector
           disableDensitySelector
           disableMultipleRowSelection
+          disableColumnResize
           disableColumnMenu
           hideFooter
           autosizeOnMount
@@ -112,6 +113,10 @@ export default function Drivers() {
             "& .Mui-selected": {
               backgroundColor: "var(--accent-primary) !important",
               color: "white",
+            },
+            "& .MuiDataGrid-row:hover": {
+              backgroundColor: "rgba(61, 139, 255, 0.5)",
+              cursor: "pointer",
             },
           }}
         />
@@ -146,12 +151,12 @@ export default function Drivers() {
             <Divider flexItem />
             <Box display="flex" className={styles.infoContainer}>
               <Box className={styles.innerInfoContainer}>
-                <DriveEta />
+                <DriveEtaOutlined />
                 <Typography noWrap>{selectedDriver.currentVehicle}</Typography>
               </Box>
               <Divider orientation="vertical" flexItem />
               <Box className={styles.innerInfoContainer}>
-                <HealthAndSafety />
+                <HealthAndSafetyOutlined />
                 <Typography>{selectedDriver.safetyScore}</Typography>
               </Box>
             </Box>

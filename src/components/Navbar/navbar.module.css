@@ -10,6 +10,7 @@
   z-index: 10;
   border-bottom: 1px solid gray;
   max-height: 10vh;
+  padding: 0 30px;
 }
 
 .navBarTitle {
@@ -55,4 +56,18 @@
   height: 30px;
   width: 30px;
   cursor: pointer;
+}
+
+.notifCount {
+  display: flex;
+  background-color: red;
+  position: absolute;
+  font-size: 10px;
+  border-radius: 50%;
+  top: -8px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
 }

@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NavBar } from "@/components/Navbar/Navbar";
+import ParentProvider from "./ParentProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,10 +13,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <NavBar />
-        <div style={{ margin: "1% 10%" }}>{children}</div>
-      </body>
+      <ParentProvider>
+        <body className={inter.className}>
+          <NavBar />
+          <div style={{ margin: "1% 10%", height: "90vh" }}>{children}</div>
+        </body>
+      </ParentProvider>
     </html>
   );
 }

@@ -10,34 +10,34 @@ export interface Driver {
 interface DriverColumns {
     field: string
     headerName: string
-    resizeable: boolean
     flex: number
+    headerClassName: string
 }
 
 export const driverColumns: DriverColumns[] = [
     {
       field: "name",
       headerName: "Name",
-      resizeable: false,
       flex: 1,
+      headerClassName: 'header'
     },
     {
       field: "safetyScore",
       headerName: "Safety Score",
-      resizeable: false,
       flex: 1,
+      headerClassName: 'header'
     },
     {
       field: "currentVehicle",
       headerName: "Vehicle",
-      resizeable: false,
       flex: 1,
+      headerClassName: 'header'
     },
     {
       field: "status",
       headerName: "Status",
-      resizeable: false,
       flex: 1,
+      headerClassName: 'header'
     },
   ]
 

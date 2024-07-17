@@ -5,7 +5,12 @@ export interface VehicleDisplayError {
     timestamp: string
 }
 
-export const vehicleData: VehicleDisplayError[] = [
+export interface VehicleHealthListProps {
+  vehicleErrors: VehicleDisplayError[]
+  vehicleSelected?: boolean
+}
+
+export const vehicleErrorData: VehicleDisplayError[] = [
   { "description": "Coolant Thermostat Circuit High", "OBDCode": "P0128", "vehicleID": "123", "timestamp": "2024-07-10T10:00:00Z" },
   { "description": "O2 Sensor Circuit Slow Response", "OBDCode": "P0133", "vehicleID": "124", "timestamp": "2024-07-10T10:05:00Z" },
   { "description": "Cylinder 1 Misfire Detected", "OBDCode": "P0301", "vehicleID": "125", "timestamp": "2024-07-10T10:10:00Z" },

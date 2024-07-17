@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styles from "./VehicleHealthList.module.css";
 import { Typography, Box } from "@mui/material";
-import { vehicleData, VehicleDisplayError } from "./types";
+import { VehicleHealthListProps } from "./types";
 
-export default function VehicleHealthList() {
+export default function VehicleHealthList({
+  vehicleErrors,
+  vehicleSelected = false,
+}: VehicleHealthListProps) {
   const formatDisplayTime = (timestamp: string): string => {
     const date = new Date(timestamp);
     const month = date.toLocaleString("default", { month: "short" });
@@ -26,7 +29,7 @@ export default function VehicleHealthList() {
         Vehicle Maintenance Alerts
       </Typography>
       <Box className={styles.errorListContainer}>
-        {vehicleData.map((vehicleInfo, index) => (
+        {vehicleErrors.map((vehicleInfo, index) => (
           <Box className={styles.ErorrContainer} key={index}>
             <Typography className={styles.errorTime} width={100} height="100%">
               {formatDisplayTime(vehicleInfo.timestamp)}
@@ -37,9 +40,11 @@ export default function VehicleHealthList() {
             <Typography width={60} borderRight="1px solid black" height="100%">
               {vehicleInfo.OBDCode}
             </Typography>
-            <Typography width={30} height="100%">
-              {vehicleInfo.vehicleID}
-            </Typography>
+            {!vehicleSelected && (
+              <Typography width={30} height="100%">
+                {vehicleInfo.vehicleID}
+              </Typography>
+            )}
           </Box>
         ))}
       </Box>
