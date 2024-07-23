@@ -44,6 +44,14 @@ export const NavBar = () => {
         >
           Vehicles
         </Box>
+        <Box
+          className={[styles.tab, pathName == "/demo" && styles.active].join(
+            " "
+          )}
+          onClick={() => router.push("/demo")}
+        >
+          Demo
+        </Box>
       </Box>
       <Box className={styles.iconContainer}>
         <Box position="relative" onClick={() => setModalOpen(!modalOpen)}>
