@@ -1,7 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 // Wrapper component for the signin page
 
 "use client";
-import React, { useState, useEffect, act } from "react";
+import React, { useState, useEffect, useRef, useReducer } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import styles from "./page.module.css";
 import { LiveFrame, Event } from "./types";
@@ -12,31 +13,45 @@ export default function Demo() {
 
   const [events, setEvents] = useState<Event[]>([]);
 
-  const [frame, setFrame] = useState(null);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     const eventSource = new EventSource(`http://127.0.0.1:5000/video_feed`);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (data.action_event != 0) {
-        addEvent(data.action_event.replaceAll("'", '"'));
-        setFrame(data.image);
+      if (imgRef.current) {
+        imgRef.current.src = `data:image/jpg;base64,${data.image}`;
       }
       addLivePredictions(data.actions_predictions, data.first_frame_num);
+      if (data.action_event != 0) {
+        addEvent(data.action_event.replaceAll("'", '"'));
+      }
     };
     return () => {
       eventSource.close();
     };
   }, []);
 
+  // useEffect(() => {
+  //   if(events.length > 1){
+  //     const prevEvent = {...(events[1])}
+  //     const currEvent = {...(events[0])}
+  //     if (prevEvent.label == currEvent.label && currEvent.frameStart - prevEvent.frameEnd < 15){
+  //       prevEvent.frameEnd = currEvent.frame
+  //     }
+  //   }
+  // }, [events])
+
   const addEvent = (action_event: any) => {
+    console.log(livePredictStream.length);
     const transformedEvent = {
       ...JSON.parse(action_event),
       camera: "Face",
     };
 
     // if (parseInt(transformedEvent.cont)) {
-    //   let newEvent = { ...[...events][0] };
+    //   console.log("PrevEvent: ", prevEvent);
+    //   let newEvent = { ...prevEvent };
     //   newEvent.frameEnd = transformedEvent.frameEnd;
     //   setEvents((events) => [newEvent].concat(events.slice(1)));
     // } else {
@@ -61,8 +76,7 @@ export default function Demo() {
   };
 
   const removeLivePredictions = () => {
-    let tempArr = livePredictStream.slice(0, 30);
-    setLivePredictStream(tempArr);
+    setLivePredictStream((livePredictStream) => livePredictStream.slice(0, 30));
   };
 
   useEffect(() => {
@@ -70,12 +84,6 @@ export default function Demo() {
       removeLivePredictions();
     }
   }, [livePredictStream]);
-
-  const renderVideos = (frame: any) => {
-    console.log(frame);
-    console.log(typeof frame);
-    return frame ? `data:image/jpg;base64,${frame}` : "";
-  };
 
   return (
     <Box className={styles.pageContainer}>
@@ -86,11 +94,12 @@ export default function Demo() {
           </Typography>
           <Box className={styles.cameraWrapper}>
             <Image
-              src={renderVideos(frame)}
+              ref={imgRef}
+              src={""}
               className={styles.video}
               width={300}
               height={300}
-              alt="test"
+              alt="Live Stream"
             />
           </Box>
         </Box>
