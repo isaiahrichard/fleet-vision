@@ -13,18 +13,19 @@ export default function Demo() {
 
   const [events, setEvents] = useState<Event[]>([]);
 
-  const imgRef = useRef(null);
+  const faceImgRef = useRef(null);
+  const bodyImgRef = useRef(null);
 
   useEffect(() => {
-    const eventSource = new EventSource(`http://127.0.0.1:5000/video_feed`);
+    const eventSource = new EventSource(`http://127.0.0.1:5000/body_stream`);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (imgRef.current) {
-        imgRef.current.src = `data:image/jpg;base64,${data.image}`;
+      if (faceImgRef.current) {
+        faceImgRef.current.src = `data:image/jpg;base64,${data.image}`;
       }
-      addLivePredictions(data.actions_predictions, data.first_frame_num);
-      if (data.action_event != 0) {
-        addEvent(data.action_event.replaceAll("'", '"'));
+      addLivePredictions(data.predictions, data.first_frame_num);
+      if (data.event != 0) {
+        addEvent(data.event.replaceAll("'", '"'));
       }
     };
     return () => {
@@ -94,7 +95,7 @@ export default function Demo() {
           </Typography>
           <Box className={styles.cameraWrapper}>
             <Image
-              ref={imgRef}
+              ref={faceImgRef}
               src={""}
               className={styles.video}
               width={300}
@@ -103,12 +104,21 @@ export default function Demo() {
             />
           </Box>
         </Box>
-        {/* <Box>
+        <Box>
           <Typography variant="h6" textAlign="center">
-            Body Cam
+            Face Cam
           </Typography>
-          <Box className={styles.cameraWrapper}>BODY</Box>
-        </Box> */}
+          <Box className={styles.cameraWrapper}>
+            <Image
+              ref={faceImgRef}
+              src={""}
+              className={styles.video}
+              width={300}
+              height={300}
+              alt="Live Stream"
+            />
+          </Box>
+        </Box>
       </Box>
       <Box className={styles.listContainer}>
         <Box className={styles.liveClasContainer}>
