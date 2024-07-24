@@ -50,7 +50,15 @@ export const NavBar = () => {
           )}
           onClick={() => router.push("/demo")}
         >
-          Demo
+          Face Demo
+        </Box>
+        <Box
+          className={[styles.tab, pathName == "/demo" && styles.active].join(
+            " "
+          )}
+          onClick={() => router.push("/bodydemo")}
+        >
+          Body Demo
         </Box>
       </Box>
       <Box className={styles.iconContainer}>
