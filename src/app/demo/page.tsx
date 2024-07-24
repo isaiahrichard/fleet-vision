@@ -5,6 +5,7 @@ import React, { useState, useEffect, act } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import styles from "./page.module.css";
 import { LiveFrame, Event } from "./types";
+import Image from "next/image";
 
 export default function Demo() {
   const [livePredictStream, setLivePredictStream] = useState<LiveFrame[]>([]);
@@ -35,7 +36,7 @@ export default function Demo() {
     };
 
     // if (parseInt(transformedEvent.cont)) {
-    //   let newEvent = { ...events[0] };
+    //   let newEvent = { ...[...events][0] };
     //   newEvent.frameEnd = transformedEvent.frameEnd;
     //   setEvents((events) => [newEvent].concat(events.slice(1)));
     // } else {
@@ -71,6 +72,8 @@ export default function Demo() {
   }, [livePredictStream]);
 
   const renderVideos = (frame: any) => {
+    console.log(frame);
+    console.log(typeof frame);
     return frame ? `data:image/jpg;base64,${frame}` : "";
   };
 
@@ -82,12 +85,12 @@ export default function Demo() {
             Face Cam
           </Typography>
           <Box className={styles.cameraWrapper}>
-            <video
+            <Image
               src={renderVideos(frame)}
               className={styles.video}
-              autoPlay
               width={300}
               height={300}
+              alt="test"
             />
           </Box>
         </Box>
