@@ -17,7 +17,7 @@ export default function Demo() {
   const bodyImgRef = useRef(null);
 
   useEffect(() => {
-    const eventSource = new EventSource(`http://127.0.0.1:5000/body_stream`);
+    const eventSource = new EventSource(`http://127.0.0.1:5000/face_stream`);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (faceImgRef.current) {
