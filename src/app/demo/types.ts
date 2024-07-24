@@ -1,6 +1,6 @@
 export interface LiveFrame{
     value: string
-    count: number
+    frameNum: number
     camera: 'Face' | 'Body'
 }
 
@@ -11,27 +11,38 @@ export interface Event{
     camera: 'Face' | 'Body'
 }
 
+export interface ModelResponse{
+    image: any
+    action_event: {
+        frameStart: number
+        frameEnd: number
+        label: string
+    } | number
+    actions_predictions: string[]
+    first_frame_num: string
+}
+
 export const initLiveData: LiveFrame[] = [
-    { "value": "change_gear", "count": 1, "camera": "Face" },
-    { "value": "drinking", "count": 2, "camera": "Body" },
-    { "value": "hair_and_makeup", "count": 3, "camera": "Face" },
-    { "value": "phonecall_left", "count": 4, "camera": "Body" },
-    { "value": "phonecall_right", "count": 5, "camera": "Face" },
-    { "value": "radio", "count": 6, "camera": "Body" },
-    { "value": "reach_backseat", "count": 7, "camera": "Face" },
-    { "value": "reach_side", "count": 8, "camera": "Body" },
-    { "value": "safe_drive", "count": 9, "camera": "Face" },
-    { "value": "standstill_or_waiting", "count": 10, "camera": "Body" },
-    { "value": "talking_to_passenger", "count": 11, "camera": "Face" },
-    { "value": "texting_left", "count": 12, "camera": "Body" },
-    { "value": "texting_right", "count": 13, "camera": "Face" },
-    { "value": "unclassified", "count": 14, "camera": "Body" },
-    { "value": "yawning_with_hand", "count": 15, "camera": "Face" },
-    { "value": "yawning_without_hand", "count": 16, "camera": "Body" },
-    { "value": "change_gear", "count": 17, "camera": "Face" },
-    { "value": "drinking", "count": 18, "camera": "Body" },
-    { "value": "hair_and_makeup", "count": 19, "camera": "Face" },
-    { "value": "phonecall_left", "count": 20, "camera": "Body" }
+    { "value": "change_gear", "frameNum": 1, "camera": "Face" },
+    { "value": "drinking", "frameNum": 2, "camera": "Body" },
+    { "value": "hair_and_makeup", "frameNum": 3, "camera": "Face" },
+    { "value": "phonecall_left", "frameNum": 4, "camera": "Body" },
+    { "value": "phonecall_right", "frameNum": 5, "camera": "Face" },
+    { "value": "radio", "frameNum": 6, "camera": "Body" },
+    { "value": "reach_backseat", "frameNum": 7, "camera": "Face" },
+    { "value": "reach_side", "frameNum": 8, "camera": "Body" },
+    { "value": "safe_drive", "frameNum": 9, "camera": "Face" },
+    { "value": "standstill_or_waiting", "frameNum": 10, "camera": "Body" },
+    { "value": "talking_to_passenger", "frameNum": 11, "camera": "Face" },
+    { "value": "texting_left", "frameNum": 12, "camera": "Body" },
+    { "value": "texting_right", "frameNum": 13, "camera": "Face" },
+    { "value": "unclassified", "frameNum": 14, "camera": "Body" },
+    { "value": "yawning_with_hand", "frameNum": 15, "camera": "Face" },
+    { "value": "yawning_without_hand", "frameNum": 16, "camera": "Body" },
+    { "value": "change_gear", "frameNum": 17, "camera": "Face" },
+    { "value": "drinking", "frameNum": 18, "camera": "Body" },
+    { "value": "hair_and_makeup", "frameNum": 19, "camera": "Face" },
+    { "value": "phonecall_left", "frameNum": 20, "camera": "Body" }
 ]
 
 

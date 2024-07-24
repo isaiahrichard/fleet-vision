@@ -1,49 +1,82 @@
 // Wrapper component for the signin page
 
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, act } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import styles from "./page.module.css";
-import { LiveFrame, initLiveData, Event, initEventData } from "./types";
-import { getLiveLabels } from "@/utils/axios";
-
-const MINUTE_MS = 60000;
+import { LiveFrame, Event, ModelResponse } from "./types";
 
 export default function Demo() {
-  const [livePredictStream, setLivePredictStream] =
-    useState<LiveFrame[]>(initLiveData);
-  const [frameCount, setFrameCount] = useState<number>(0);
+  const [livePredictStream, setLivePredictStream] = useState<LiveFrame[]>([]);
 
-  const [events, setEvents] = useState<Event[]>(initEventData);
+  const [events, setEvents] = useState<Event[]>([]);
 
-  const getData = () => {
-    const response = getLiveLabels();
-    response.then((res) => {
-      if (res.status == 200) {
-        const labelData = [
-          ...res.data.eyes_predictions,
-          res.data.actions_predictions,
-        ];
-        setLivePredictStream([...livePredictStream, ...labelData]);
-      }
-      setTimeout(getData, 1000);
-    });
+  const [frame, setFrame] = useState(null);
+
+  useEffect(() => {
+    const eventSource = new EventSource(`http://127.0.0.1:5000/video_feed`);
+    eventSource.onmessage = (event) => {
+      const data: ModelResponse = JSON.parse(event.data);
+      // setFrame(data.image);
+      // if (data.action_event != 0) {
+      //   addEvent(data.action_event);
+      // }
+      addLivePredictions(data.actions_predictions, data.first_frame_num);
+    };
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  const addEvent = (action_event: any) => {
+    if (!events.length) {
+      setEvents({ ...action_event, camera: "Face" });
+      return;
+    }
+    const prevEvent = { ...events.slice(-1)[0] };
+    if (
+      prevEvent.label == action_event.label &&
+      action_event.frameStart - prevEvent.frameEnd < 15
+    ) {
+      const newEvents = [
+        ...events.slice(0, -1),
+        { ...prevEvent, frameEnd: action_event.frameEnd },
+      ];
+      setEvents(newEvents);
+    } else {
+      setEvents([...events, { ...action_event, camera: "Face" }]);
+    }
+  };
+
+  const addLivePredictions = (predictions: string[], startingFrame: string) => {
+    const transformPredictions: LiveFrame[] = predictions.map(
+      (prediction, index) => ({
+        value: prediction,
+        frameNum: parseInt(startingFrame) + index,
+        camera: "Face",
+      })
+    );
+    transformPredictions.reverse();
+
+    setLivePredictStream((livePredictStream) =>
+      [...transformPredictions].concat(livePredictStream)
+    );
+  };
+
+  const removeLivePredictions = () => {
+    let tempArr = livePredictStream.slice(0, 80);
+    setLivePredictStream(tempArr);
   };
 
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (livePredictStream.length > 100) {
-      removeFrames();
+    if (livePredictStream.length > 150) {
+      removeLivePredictions();
     }
   }, [livePredictStream]);
 
-  const removeFrames = () => {
-    let tempArr = livePredictStream.filter((element, index) => index >= 16);
-    setLivePredictStream(tempArr);
-  };
+  const videoSource = frame
+    ? URL.createObjectURL(new Blob([frame], { type: "image/jpeg" }))
+    : "";
 
   return (
     <Box className={styles.pageContainer}>
@@ -52,7 +85,14 @@ export default function Demo() {
           <Typography variant="h6" textAlign="center">
             Face Cam
           </Typography>
-          <Box className={styles.cameraWrapper}>FACE</Box>
+          <Box className={styles.cameraWrapper}>
+            <video
+              src={videoSource}
+              autoPlay
+              controls
+              className={styles.video}
+            />
+          </Box>
         </Box>
         {/* <Box>
           <Typography variant="h6" textAlign="center">
@@ -64,7 +104,7 @@ export default function Demo() {
       <Box className={styles.listContainer}>
         <Box className={styles.liveClasContainer}>
           <Typography variant="h5" textAlign={"center"} fontWeight={500}>
-            Live Frame Classification
+            Event Feed
           </Typography>
           {events.map((prediction, index) => (
             <Box key={index} className={styles.liveClasBox}>
@@ -86,14 +126,14 @@ export default function Demo() {
         </Box>
         <Box className={styles.liveClasContainer}>
           <Typography variant="h5" textAlign={"center"} fontWeight={500}>
-            Event Feed
+            Live Frame Classification
           </Typography>
           {livePredictStream.map((prediction, index) => (
             <Box key={index} className={styles.liveClasBox}>
               <Typography
                 textAlign={"center"}
                 width={150}
-              >{`Frame #${prediction.count}`}</Typography>
+              >{`Frame #${prediction.frameNum}`}</Typography>
               <Divider orientation="vertical" flexItem />
               <Typography textAlign={"center"} width={150}>
                 {prediction.value}
