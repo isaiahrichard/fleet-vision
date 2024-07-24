@@ -13,15 +13,14 @@ export default function BodyDemo() {
 
   const [events, setEvents] = useState<Event[]>([]);
 
-  const faceImgRef = useRef(null);
   const bodyImgRef = useRef(null);
 
   useEffect(() => {
     const eventSource = new EventSource(`http://127.0.0.1:5000/body_stream`);
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      if (faceImgRef.current) {
-        faceImgRef.current.src = `data:image/jpg;base64,${data.image}`;
+      if (bodyImgRef.current) {
+        bodyImgRef.current.src = `data:image/jpg;base64,${data.image}`;
       }
       addLivePredictions(data.predictions, data.first_frame_num);
       if (data.event != 0) {
@@ -91,26 +90,11 @@ export default function BodyDemo() {
       <Box className={styles.cameraContainer}>
         <Box>
           <Typography variant="h6" textAlign="center">
-            Face Cam
+            Body Cam
           </Typography>
           <Box className={styles.cameraWrapper}>
             <Image
-              ref={faceImgRef}
-              src={""}
-              className={styles.video}
-              width={300}
-              height={300}
-              alt="Live Stream"
-            />
-          </Box>
-        </Box>
-        <Box>
-          <Typography variant="h6" textAlign="center">
-            Face Cam
-          </Typography>
-          <Box className={styles.cameraWrapper}>
-            <Image
-              ref={faceImgRef}
+              ref={bodyImgRef}
               src={""}
               className={styles.video}
               width={300}

@@ -14,7 +14,6 @@ export default function Demo() {
   const [events, setEvents] = useState<Event[]>([]);
 
   const faceImgRef = useRef(null);
-  const bodyImgRef = useRef(null);
 
   useEffect(() => {
     const eventSource = new EventSource(`http://127.0.0.1:5000/face_stream`);
@@ -89,21 +88,6 @@ export default function Demo() {
   return (
     <Box className={styles.pageContainer}>
       <Box className={styles.cameraContainer}>
-        <Box>
-          <Typography variant="h6" textAlign="center">
-            Face Cam
-          </Typography>
-          <Box className={styles.cameraWrapper}>
-            <Image
-              ref={faceImgRef}
-              src={""}
-              className={styles.video}
-              width={300}
-              height={300}
-              alt="Live Stream"
-            />
-          </Box>
-        </Box>
         <Box>
           <Typography variant="h6" textAlign="center">
             Face Cam
