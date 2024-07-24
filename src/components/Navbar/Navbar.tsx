@@ -63,11 +63,11 @@ export const NavBar = () => {
         </Box>
       </Box>
       <Box className={styles.iconContainer}>
-        <Box position="relative" onClick={() => setModalOpen(!modalOpen)}>
+        <Box position="relative">
           <Notifications className={styles.icon} />
-          <Box className={styles.notifCount}>
+          {/* <Box className={styles.notifCount}>
             <span>{count}</span>
-          </Box>
+          </Box> */}
         </Box>
         <Settings className={styles.icon} />
         <Person className={styles.icon} />
