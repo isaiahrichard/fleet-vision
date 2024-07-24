@@ -4,7 +4,8 @@
 import React, { useState, useEffect, act } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import styles from "./page.module.css";
-import { LiveFrame, Event, ModelResponse } from "./types";
+import { LiveFrame, Event } from "./types";
+import Image from "next/image";
 
 export default function Demo() {
   const [livePredictStream, setLivePredictStream] = useState<LiveFrame[]>([]);
@@ -16,11 +17,11 @@ export default function Demo() {
   useEffect(() => {
     const eventSource = new EventSource(`http://127.0.0.1:5000/video_feed`);
     eventSource.onmessage = (event) => {
-      const data: ModelResponse = JSON.parse(event.data);
-      // setFrame(data.image);
-      // if (data.action_event != 0) {
-      //   addEvent(data.action_event);
-      // }
+      const data = JSON.parse(event.data);
+      if (data.action_event != 0) {
+        addEvent(data.action_event.replaceAll("'", '"'));
+        setFrame(data.image);
+      }
       addLivePredictions(data.actions_predictions, data.first_frame_num);
     };
     return () => {
@@ -29,23 +30,26 @@ export default function Demo() {
   }, []);
 
   const addEvent = (action_event: any) => {
-    if (!events.length) {
-      setEvents({ ...action_event, camera: "Face" });
-      return;
-    }
-    const prevEvent = { ...events.slice(-1)[0] };
-    if (
-      prevEvent.label == action_event.label &&
-      action_event.frameStart - prevEvent.frameEnd < 15
-    ) {
-      const newEvents = [
-        ...events.slice(0, -1),
-        { ...prevEvent, frameEnd: action_event.frameEnd },
-      ];
-      setEvents(newEvents);
-    } else {
-      setEvents([...events, { ...action_event, camera: "Face" }]);
-    }
+    const transformedEvent = {
+      ...JSON.parse(action_event),
+      camera: "Face",
+    };
+    setEvents((events) => [transformedEvent].concat(events));
+    // const prevEvent = { ...events.slice(-1)[0] };
+    // if (
+    //   prevEvent.label == action_event.label &&
+    //   action_event.frameStart - prevEvent.frameEnd < 15
+    // ) {
+    //   console.log("Getting Here");
+    //   const newEvents = [
+    //     ...events.slice(0, -1),
+    //     { ...prevEvent, frameEnd: action_event.frameEnd },
+    //   ];
+    //   setEvents(newEvents);
+    // } else {
+    //   console.log("Getting Here 2");
+    //   setEvents([...events, { ...action_event, camera: "Face" }]);
+    // }
   };
 
   const addLivePredictions = (predictions: string[], startingFrame: string) => {
@@ -86,11 +90,12 @@ export default function Demo() {
             Face Cam
           </Typography>
           <Box className={styles.cameraWrapper}>
-            <video
+            <Image
               src={videoSource}
-              autoPlay
-              controls
               className={styles.video}
+              alt="live feed"
+              width={300}
+              height={300}
             />
           </Box>
         </Box>

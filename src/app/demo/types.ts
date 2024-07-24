@@ -11,17 +11,6 @@ export interface Event{
     camera: 'Face' | 'Body'
 }
 
-export interface ModelResponse{
-    image: any
-    action_event: {
-        frameStart: number
-        frameEnd: number
-        label: string
-    } | number
-    actions_predictions: string[]
-    first_frame_num: string
-}
-
 export const initLiveData: LiveFrame[] = [
     { "value": "change_gear", "frameNum": 1, "camera": "Face" },
     { "value": "drinking", "frameNum": 2, "camera": "Body" },
