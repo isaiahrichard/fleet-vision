@@ -5,7 +5,6 @@ import React, { useState, useEffect, act } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import styles from "./page.module.css";
 import { LiveFrame, Event } from "./types";
-import Image from "next/image";
 
 export default function Demo() {
   const [livePredictStream, setLivePredictStream] = useState<LiveFrame[]>([]);
@@ -34,21 +33,14 @@ export default function Demo() {
       ...JSON.parse(action_event),
       camera: "Face",
     };
-    setEvents((events) => [transformedEvent].concat(events));
-    // const prevEvent = { ...events.slice(-1)[0] };
-    // if (
-    //   prevEvent.label == action_event.label &&
-    //   action_event.frameStart - prevEvent.frameEnd < 15
-    // ) {
-    //   console.log("Getting Here");
-    //   const newEvents = [
-    //     ...events.slice(0, -1),
-    //     { ...prevEvent, frameEnd: action_event.frameEnd },
-    //   ];
-    //   setEvents(newEvents);
+
+    // if (parseInt(transformedEvent.cont)) {
+    //   let newEvent = { ...events[0] };
+    //   newEvent.frameEnd = transformedEvent.frameEnd;
+    //   setEvents((events) => [newEvent].concat(events.slice(1)));
     // } else {
-    //   console.log("Getting Here 2");
-    //   setEvents([...events, { ...action_event, camera: "Face" }]);
+    delete transformedEvent.cont;
+    setEvents((events) => [transformedEvent].concat(events));
     // }
   };
 
@@ -68,7 +60,7 @@ export default function Demo() {
   };
 
   const removeLivePredictions = () => {
-    let tempArr = livePredictStream.slice(0, 80);
+    let tempArr = livePredictStream.slice(0, 30);
     setLivePredictStream(tempArr);
   };
 
@@ -78,9 +70,9 @@ export default function Demo() {
     }
   }, [livePredictStream]);
 
-  const videoSource = frame
-    ? URL.createObjectURL(new Blob([frame], { type: "image/jpeg" }))
-    : "";
+  const renderVideos = (frame: any) => {
+    return frame ? `data:image/jpg;base64,${frame}` : "";
+  };
 
   return (
     <Box className={styles.pageContainer}>
@@ -90,10 +82,10 @@ export default function Demo() {
             Face Cam
           </Typography>
           <Box className={styles.cameraWrapper}>
-            <Image
-              src={videoSource}
+            <video
+              src={renderVideos(frame)}
               className={styles.video}
-              alt="live feed"
+              autoPlay
               width={300}
               height={300}
             />
@@ -111,21 +103,25 @@ export default function Demo() {
           <Typography variant="h5" textAlign={"center"} fontWeight={500}>
             Event Feed
           </Typography>
-          {events.map((prediction, index) => (
+          {events.map((event, index) => (
             <Box key={index} className={styles.liveClasBox}>
-              <Typography textAlign={"center"} width={150}>
-                {prediction.label}
+              <Typography
+                textAlign={"center"}
+                width={150}
+                textTransform={"capitalize"}
+              >
+                {event.label.replaceAll("_", " ")}
               </Typography>
               <Divider orientation="vertical" flexItem />
               <Typography
                 textAlign={"center"}
                 width={150}
-              >{`From: Frame #${prediction.frameStart}`}</Typography>
+              >{`From: Frame #${event.frameStart}`}</Typography>
               <Divider orientation="vertical" flexItem />
               <Typography
                 textAlign={"center"}
                 width={150}
-              >{`To: Frame #${prediction.frameEnd}`}</Typography>
+              >{`To: Frame #${event.frameEnd}`}</Typography>
             </Box>
           ))}
         </Box>
