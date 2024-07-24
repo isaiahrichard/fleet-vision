@@ -83,7 +83,7 @@ export default function FormTextField({
       <InputLabel
         shrink
         htmlFor="bootstrap-input"
-        style={{ color: "white", fontSize: "18px" }}
+        style={{ color: "black", fontSize: "18px" }}
       >
         {labelName === "Search" ? (
           ""
