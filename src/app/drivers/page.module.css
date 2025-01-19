@@ -92,3 +92,19 @@
   padding: 8px;
   display: flex;
 }
+
+.safetyScoreContainer {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  border: 25px solid var(--accent-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px;
+}
+
+.safetyScore {
+  font-size: 60px;
+  font-weight: 600;
+}

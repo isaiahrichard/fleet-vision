@@ -164,20 +164,14 @@ export default function Drivers() {
             <Box className={styles.behaviourContainer}>
               <Box className={styles.behaviourTitleBox}>
                 <Typography textAlign="center" fontSize={24}>
-                  <Typography className={styles.largeTitle}>TOP</Typography>
-                  Driver Behaviours
+                  <Typography className={styles.largeTitle}>Safety</Typography>
+                  Score
                 </Typography>
               </Box>
               <Box className={styles.behaviourListContainer}>
-                {sortedDriverBehaviour.map((driverBehaviour, index) => (
-                  <Box key={index} className={styles.behaviourPill}>
-                    <Typography px={1} minWidth={200}>
-                      {driverBehaviour.name}
-                    </Typography>
-                    <Divider orientation="vertical" flexItem />
-                    <Typography px={1}>{driverBehaviour.count}</Typography>
-                  </Box>
-                ))}
+                <div className={styles.safetyScoreContainer}>
+                  <div className={styles.safetyScore}>85</div>
+                </div>
               </Box>
             </Box>
           </Box>
