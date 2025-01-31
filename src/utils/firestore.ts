@@ -1,18 +1,22 @@
 import { getDocs, query, collection, orderBy, limit, where } from 'firebase/firestore';
+import { FrameBatchType } from './general';
 import { db } from "@/lib/firebase/firebase";
 
-const get_data = async () => {
-    const querySnapshot = await getDocs(collection(db, "drive_sessions"));
-    querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-    });
+export const getData = async (collectionName: string) => {
+    const querySnapshot = await getDocs(collection(db, collectionName));
+    if (querySnapshot.empty) {
+        console.log('No matching documents.');
+        return [];
+    }
+    const documents: FrameBatchType[] = querySnapshot.docs.map(doc => (doc.data() as FrameBatchType));
+    return documents;
 }
 
-export const getDocumentsByRecentSession = async () => {
+export const getDocumentsByRecentSession = async (collection_name: string) => {
     try {
       // Step 1: Get the document with the most recent timestamp_start
       const q = query(
-        collection(db, 'drive_sessions'),
+        collection(db, collection_name),
         orderBy('timestamp_start', 'desc'),
         limit(1) // Get only the most recent document
       );
@@ -26,17 +30,14 @@ export const getDocumentsByRecentSession = async () => {
   
         // Step 3: Query all documents with the same session_id
         const sessionQuery = query(
-          collection(db, 'drive_sessions'),
+          collection(db, collection_name),
           where('session_id', '==', sessionId)
         );
         const resultSnapshot = await getDocs(sessionQuery);
   
         if (!resultSnapshot.empty) {
           // Return all documents with the matching session_id
-          const documents = resultSnapshot.docs.map(doc => ({
-            id: doc.id,
-            data: doc.data()
-          }));
+          const documents = resultSnapshot.docs.map(doc => (doc.data() as FrameBatchType));
           return documents; // Return the array of documents
         } else {
           console.log('No documents found with the same session_id');
