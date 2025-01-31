@@ -4,12 +4,15 @@ import { Box, Typography, Button } from "@mui/material";
 import styles from "./page.module.css";
 import DisplayCard from "@/components/common/DisplayCard";
 import { getData, getDocumentsByRecentSession } from "@/utils/firestore";
+import { useRouter } from "next/navigation";
 import {
   Person,
   ExitToApp,
   Dashboard as DashboardIcon,
   TimeToLeave,
   Settings,
+  Face,
+  Accessibility,
 } from "@mui/icons-material";
 import Image from "next/image";
 import { Anonymous_Pro } from "next/font/google";
@@ -61,6 +64,8 @@ export default function Dashboard() {
     null
   );
 
+  const router = useRouter();
+
   useEffect(() => {
     const loadData = async () => {
       const localBodyData: FrameBatchType[] = await getData(
@@ -104,6 +109,24 @@ export default function Dashboard() {
               Vehicle Information
             </Typography>
           </Box>
+          <Box
+            className={styles.iconContainer}
+            onClick={() => router.push("/bodydemo")}
+          >
+            <Accessibility className={styles.icon} />
+            <Typography className={anonymous.className} variant="h5">
+              Body Stream
+            </Typography>
+          </Box>
+          <Box
+            className={styles.iconContainer}
+            onClick={() => router.push("/demo")}
+          >
+            <Face className={styles.icon} />
+            <Typography className={anonymous.className} variant="h5">
+              Face Stream
+            </Typography>
+          </Box>
           <Box className={styles.iconContainer}>
             <Settings className={styles.icon} />
             <Typography className={anonymous.className} variant="h5">
@@ -114,7 +137,6 @@ export default function Dashboard() {
         <Box style={{ display: "flex", flexDirection: "column", gap: 15 }}>
           <Box className={styles.iconContainer}>
             <Person className={styles.icon} />
-
             <Typography className={anonymous.className} variant="h5">
               Profile
             </Typography>
