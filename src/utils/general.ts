@@ -54,9 +54,9 @@ export const getDateTimeValues = (unixTimestamp: number) => {
   const date = new Date(unixTimestamp * 1000);
   
   const options: Intl.DateTimeFormatOptions = { 
-      month: 'short',    
+      month: 'numeric',    
       day: 'numeric',    
-      year: 'numeric',   
+      year: '2-digit',   
       timeZone: 'EST'
   };
   
@@ -76,7 +76,6 @@ export const getDateTimeValues = (unixTimestamp: number) => {
 const getSafetyScore = (frameBatch: FrameBatchType) => {
   let score = 0;
   frameBatch.frames.forEach((frame: string) => {
-    console.log("Frame: ", frame)
     const frameScore = safetyScoreMap[frame];
     if (frameScore) {
       score += frameScore.scoreModifier;
@@ -98,11 +97,11 @@ export const getSafetyScoreProgression = (session: FrameBatchType[]) => {
   return safetyScores
 }
 
-const capitalize = (str, lower = false) =>
+const capitalize = (str: string, lower = false) =>
   (lower ? str.toLowerCase() : str).replace(/(?:^|\s|["'([{])+\S/g, match => match.toUpperCase());
 ;
 
-export const countFrameOccurrences = (dataArray) => {
+export const countFrameOccurrences = (dataArray: FrameBatchType[]) => {
   if (!dataArray) return []
   const frameTypes = [
       "texting", "phone_call", "radio", "reach_side", 
@@ -110,7 +109,7 @@ export const countFrameOccurrences = (dataArray) => {
   ];
   
   // Initialize counts for each frame type
-  const frameCounts = frameTypes.reduce((acc, frame) => {
+  const frameCounts: { [key: string]: number } = frameTypes.reduce((acc: { [key: string]: number }, frame: string) => {
       acc[frame] = 0;
       return acc;
   }, {});
@@ -134,7 +133,7 @@ export const countFrameOccurrences = (dataArray) => {
   }));
 }
 
-export const getSafetyScoreBySession = (session) => {
+export const getSafetyScoreBySession = (session: FrameBatchType[]) => {
   if (!session) return 0
   let safetyScore = 0;
   session.forEach((frameBatch: FrameBatchType) => {

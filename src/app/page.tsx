@@ -47,11 +47,15 @@ function SessionPill(session: FrameBatchType[] | null) {
   );
   return (
     <Box className={styles.sessionPill}>
-      <Typography variant="body1">
-        {`${startDate} ${startTime}   →   ${endDate} ${endTime}`}
-      </Typography>
-      <Typography variant="body1" style={{ color: "#3d8cff" }}>
+      <Typography
+        variant="h6"
+        style={{ color: "#3d8cff" }}
+        className={anonymous.className}
+      >
         Safety Score: {safetyScore}
+      </Typography>
+      <Typography className={anonymous.className}>
+        {`${startDate} ${startTime}   →   ${endDate} ${endTime}`}
       </Typography>
     </Box>
   );
@@ -127,12 +131,6 @@ export default function Dashboard() {
               Face Stream
             </Typography>
           </Box>
-          <Box className={styles.iconContainer}>
-            <Settings className={styles.icon} />
-            <Typography className={anonymous.className} variant="h5">
-              Settings
-            </Typography>
-          </Box>
         </Box>
         <Box style={{ display: "flex", flexDirection: "column", gap: 15 }}>
           <Box className={styles.iconContainer}>
@@ -187,7 +185,7 @@ export default function Dashboard() {
                 bottomAxis={null}
                 series={[
                   {
-                    data: getSafetyScoreProgression(recentSession),
+                    data: getSafetyScoreProgression(recentSession || []),
                   },
                 ]}
                 width={500}
@@ -261,6 +259,14 @@ export default function Dashboard() {
                       innerRadius: 30,
                       additionalRadius: -30,
                       color: "gray",
+                    },
+                    label: (location) => {
+                      if (location === "legend") {
+                        return "Legend Label";
+                      } else if (location === "tooltip") {
+                        return "Tooltip Label";
+                      }
+                      return "Default Label";
                     },
                   },
                 ]}
