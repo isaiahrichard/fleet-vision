@@ -10,7 +10,6 @@ import {
   ExitToApp,
   Dashboard as DashboardIcon,
   TimeToLeave,
-  Settings,
   Face,
   Accessibility,
 } from "@mui/icons-material";
