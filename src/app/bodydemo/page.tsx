@@ -46,7 +46,7 @@ export default function BodyDemo() {
     console.log(livePredictStream.length);
     const transformedEvent = {
       ...JSON.parse(action_event),
-      camera: "Face",
+      camera: "Body",
     };
 
     // if (parseInt(transformedEvent.cont)) {
@@ -65,7 +65,7 @@ export default function BodyDemo() {
       (prediction, index) => ({
         value: prediction,
         frameNum: parseInt(startingFrame) + index,
-        camera: "Face",
+        camera: "Body",
       })
     );
     transformPredictions.reverse();

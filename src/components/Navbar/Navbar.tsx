@@ -45,6 +45,15 @@ export const NavBar = () => {
           Vehicles
         </Box>
         <Box
+          className={[
+            styles.tab,
+            pathName == "/bodydemo" && styles.active,
+          ].join(" ")}
+          onClick={() => router.push("/bodydemo")}
+        >
+          Body Demo Old
+        </Box>
+        <Box
           className={[styles.tab, pathName == "/demo" && styles.active].join(
             " "
           )}
@@ -55,11 +64,11 @@ export const NavBar = () => {
         <Box
           className={[
             styles.tab,
-            pathName == "/bodydemo" && styles.active,
+            pathName == "/bodydemoclip" && styles.active,
           ].join(" ")}
-          onClick={() => router.push("/bodydemo")}
+          onClick={() => router.push("/bodydemoclip")}
         >
-          Body Demo
+          Body Demo Clip
         </Box>
       </Box>
       <Box className={styles.iconContainer}>
