@@ -61,8 +61,9 @@
   display: flex;
   border: 1px solid gray;
   border-radius: 8px;
-  padding: 10px;
+  padding: 10px 60px;
   justify-content: space-between;
+  min-width: 60%;
 }
 
 .behaviourContainer {
@@ -70,7 +71,13 @@
   flex: 1 1 0px;
   gap: 32px;
   margin-top: 20px;
-  padding: 16px;
+  padding: 16px 60px;
+  border: 2px solid gray;
+  border-radius: 20px;
+  &:hover {
+    background-color: lightgray;
+    cursor: pointer;
+  }
 }
 
 .behaviourTitleBox {
@@ -84,11 +91,60 @@
   .largeTitle {
     font-weight: 900;
     font-size: 80px;
-    color: var(--accent-primary);
   }
 }
 
 .searchBar {
   padding: 8px;
   display: flex;
+}
+
+.safetyScoreContainer {
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+  border-width: 25px;
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px;
+}
+
+.safetyScore {
+  font-size: 60px;
+  font-weight: 600;
+}
+
+.safetyScoreMessage {
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.behaviourList {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.behaviourListTitle {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.backButton {
+  border: 1px solid gray;
+  padding: 12px;
+  border-radius: 20px;
+  margin-top: 20px;
+  display: inline-block;
+
+  &:hover {
+    border-color: black;
+    transform: scale(1.1);
+    cursor: pointer;
+  }
 }

@@ -15,8 +15,7 @@ export default function RootLayout({
     <html lang="en">
       <ParentProvider>
         <body className={inter.className}>
-          <NavBar />
-          <div style={{ margin: "1% 10%", height: "90vh" }}>{children}</div>
+          <div>{children}</div>
         </body>
       </ParentProvider>
     </html>
